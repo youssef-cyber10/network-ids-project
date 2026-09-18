@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SentinelFlow — Network Intrusion Detection</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+</head>
+<body>
+
+<div class="shell">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">◆</div>
+      <div>
+        <div class="brand-name">SENTINELFLOW</div>
+        <div class="brand-sub">Network Intrusion Detection</div>
+      </div>
+    </div>
+
+    <nav class="nav">
+      <button class="nav-item active" data-view="overview">Overview</button>
+      <button class="nav-item" data-view="monitor">Live Monitor</button>
+      <button class="nav-item" data-view="csv">CSV Analysis</button>
+      <button class="nav-item" data-view="alerts">Security Alerts</button>
+      <button class="nav-item" data-view="model">Model Info</button>
+    </nav>
+
+    <div class="sidebar-foot">
+      <button id="notify-btn" class="btn-ghost small">Enable Desktop Alerts</button>
+      <div class="status-line">
+        <span class="status-dot"></span>
+        <span id="model-status-label">Checking…</span>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <h1 id="view-title">Threat Monitoring Dashboard</h1>
+      <div class="system-status">
+        <span class="status-dot online"></span>
+        <span>SYSTEM ONLINE</span>
+      </div>
+    </header>
+
+    <!-- OVERVIEW -->
+    <section class="view active" id="view-overview">
+      <div class="card-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total records</span>
+          <span class="stat-value" id="ov-total">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Attacks</span>
+          <span class="stat-value danger" id="ov-attacks">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Normal traffic</span>
+          <span class="stat-value success" id="ov-normal">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Attack precision</span>
+          <span class="stat-value" id="ov-precision">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Attack recall</span>
+          <span class="stat-value" id="ov-recall">—</span>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">False negative rate</span>
+          <span class="stat-value warning" id="ov-fnr">—</span>
+        </div>
+      </div>
+
+      <div class="panels">
+        <div class="panel">
+          <h2>Attack category distribution</h2>
+          <canvas id="chart-categories" height="220"></canvas>
+        </div>
+        <div class="panel">
+          <h2>Traffic split</h2>
+          <canvas id="chart-split" height="220"></canvas>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE MONITOR -->
+    <section class="view" id="view-monitor">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Live monitoring simulation</h2>
+          <div class="controls">
+            <label for="packet-count">packets</label>
+            <input type="range" id="packet-count" min="20" max="200" step="10" value="50">
+            <span id="packet-count-val" class="mono">50</span>
+            <button id="sim-btn" class="btn-primary">Start Monitoring</button>
+          </div>
+        </div>
+        <p class="notice">Simulated traffic sampled from the NSL-KDD test set — not a live network capture.</p>
+        <div class="monitor-counters">
+          <div><span class="mono" id="c-inspected">0</span><label>inspected</label></div>
+          <div><span class="mono danger" id="c-alerts">0</span><label>alerts</label></div>
+          <div><span class="mono" id="c-rate">0%</span><label>alert rate</label></div>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="terminal" id="terminal">
+          <p class="terminal-hint">Press "Start Monitoring" to inspect a live sample of test traffic.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- CSV ANALYSIS -->
+    <section class="view" id="view-csv">
+      <div class="panel">
+        <h2>Upload traffic for analysis</h2>
+        <p class="notice">CSV must be in raw NSL-KDD format: no header, comma-separated, 41 feature columns (optionally followed by a label/difficulty column).</p>
+        <div class="upload-row">
+          <input type="file" id="csv-file" accept=".csv,.txt">
+          <button id="csv-analyze-btn" class="btn-primary">Analyze</button>
+          <button id="csv-download-btn" class="btn-ghost" disabled>Download Results</button>
+        </div>
+        <div id="csv-error" class="error-msg"></div>
+        <div id="csv-summary" class="csv-summary"></div>
+        <div class="table-wrap">
+          <table id="csv-table" class="data-table">
+            <thead>
+              <tr><th>Row</th><th>Prediction</th><th>Attack probability</th></tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ALERTS -->
+    <section class="view" id="view-alerts">
+      <div class="panel">
+        <div class="panel-head">
+          <h2>Security alerts</h2>
+          <span class="badge-simulated">Simulated IPs — demo mode</span>
+        </div>
+        <div class="table-wrap">
+          <table class="data-table" id="alerts-table">
+            <thead>
+              <tr>
+                <th>Time</th>
+                <th>Source IP</th>
+                <th>Destination IP</th>
+                <th>Protocol</th>
+                <th>Type</th>
+                <th>Confidence</th>
+                <th>Severity</th>
+                <th>Origin</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MODEL -->
+    <section class="view" id="view-model">
+      <div class="panel">
+        <h2>Model information</h2>
+        <dl class="model-info">
+          <div><dt>Model type</dt><dd id="mi-type">—</dd></div>
+          <div><dt>Dataset</dt><dd id="mi-dataset">—</dd></div>
+          <div><dt>Trees (n_estimators)</dt><dd id="mi-trees">—</dd></div>
+          <div><dt>Attack Precision</dt><dd id="mi-precision">—</dd></div>
+          <div><dt>Attack Recall</dt><dd id="mi-recall">—</dd></div>
+          <div><dt>Status</dt><dd id="mi-status">—</dd></div>
+        </dl>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Alert Modal -->
+<div class="modal-backdrop" id="alert-modal">
+  <div class="modal">
+    <div class="modal-head">
+      <span>⚠ SECURITY ALERT</span>
+      <button id="modal-close" aria-label="Close">×</button>
+    </div>
+    <p class="modal-sub">
+      Suspicious activity detected
+      <span class="badge-simulated">Simulated</span>
+    </p>
+    <dl class="modal-fields">
+      <div><dt>Source</dt><dd id="m-source">—</dd></div>
+      <div><dt>Destination</dt><dd id="m-dest">—</dd></div>
+      <div><dt>Protocol</dt><dd id="m-protocol">—</dd></div>
+      <div><dt>Destination Port</dt><dd id="m-port">—</dd></div>
+      <div><dt>Classification</dt><dd id="m-class">—</dd></div>
+      <div><dt>Confidence</dt><dd id="m-confidence">—</dd></div>
+      <div><dt>Severity</dt><dd id="m-severity">—</dd></div>
+      <div><dt>Detected at</dt><dd id="m-time">—</dd></div>
+    </dl>
+  </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
