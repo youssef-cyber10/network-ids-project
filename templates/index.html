@@ -1,25 +1,29 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>SentinelFlow — Network Intrusion Detection</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SentinelFlow // NIDS</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛡️</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@600;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.4/chart.umd.min.js"></script>
 </head>
 <body>
 
-<div class="shell">
+<div class="grid-bg"></div>
+<div class="scanlines"></div>
+<div class="vignette"></div>
 
-  <aside class="sidebar">
+<div class="app">
+
+  <header class="topnav">
     <div class="brand">
-      <div class="brand-mark">◆</div>
-      <div>
-        <div class="brand-name">SENTINELFLOW</div>
-        <div class="brand-sub">Network Intrusion Detection</div>
+      <span class="brand-icon">◈</span>
+      <div class="brand-text">
+        <span class="brand-name">SENTINEL<em>FLOW</em></span>
+        <span class="brand-sub">// NETWORK INTRUSION DETECTION SYSTEM</span>
       </div>
     </div>
 
@@ -31,23 +35,23 @@
       <button class="nav-item" data-view="model">Model Info</button>
     </nav>
 
-    <div class="sidebar-foot">
-      <button id="notify-btn" class="btn-ghost small">Enable Desktop Alerts</button>
-      <div class="status-line">
+    <div class="nav-right">
+      <div class="status-pill">
         <span class="status-dot"></span>
-        <span id="model-status-label">Checking…</span>
+        <span id="model-status-label">CHECKING…</span>
       </div>
+      <button id="notify-btn" class="btn-neon small">Enable Alerts</button>
     </div>
-  </aside>
+  </header>
 
-  <div class="main">
-    <header class="topbar">
-      <h1 id="view-title">Threat Monitoring Dashboard</h1>
+  <main>
+    <div class="page-head">
+      <h1 id="view-title">Overview</h1>
       <div class="system-status">
         <span class="status-dot online"></span>
         <span>SYSTEM ONLINE</span>
       </div>
-    </header>
+    </div>
 
     <!-- OVERVIEW -->
     <section class="view active" id="view-overview">
@@ -99,7 +103,7 @@
             <label for="packet-count">packets</label>
             <input type="range" id="packet-count" min="20" max="200" step="10" value="50">
             <span id="packet-count-val" class="mono">50</span>
-            <button id="sim-btn" class="btn-primary">Start Monitoring</button>
+            <button id="sim-btn" class="btn-neon">Start Monitoring</button>
           </div>
         </div>
         <p class="notice">Simulated traffic sampled from the NSL-KDD test set — not a live network capture.</p>
@@ -110,7 +114,7 @@
         </div>
         <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
         <div class="terminal" id="terminal">
-          <p class="terminal-hint">Press "Start Monitoring" to inspect a live sample of test traffic.</p>
+          <p class="terminal-hint">&gt; awaiting command_ press "Start Monitoring" to inspect live sample</p>
         </div>
       </div>
     </section>
@@ -122,16 +126,14 @@
         <p class="notice">CSV must be in raw NSL-KDD format: no header, comma-separated, 41 feature columns (optionally followed by a label/difficulty column).</p>
         <div class="upload-row">
           <input type="file" id="csv-file" accept=".csv,.txt">
-          <button id="csv-analyze-btn" class="btn-primary">Analyze</button>
-          <button id="csv-download-btn" class="btn-ghost" disabled>Download Results</button>
+          <button id="csv-analyze-btn" class="btn-neon">Analyze</button>
+          <button id="csv-download-btn" class="btn-neon ghost" disabled>Download Results</button>
         </div>
         <div id="csv-error" class="error-msg"></div>
         <div id="csv-summary" class="csv-summary"></div>
         <div class="table-wrap">
           <table id="csv-table" class="data-table">
-            <thead>
-              <tr><th>Row</th><th>Prediction</th><th>Attack probability</th></tr>
-            </thead>
+            <thead><tr><th>Row</th><th>Prediction</th><th>Attack probability</th></tr></thead>
             <tbody></tbody>
           </table>
         </div>
@@ -148,16 +150,7 @@
         <div class="table-wrap">
           <table class="data-table" id="alerts-table">
             <thead>
-              <tr>
-                <th>Time</th>
-                <th>Source IP</th>
-                <th>Destination IP</th>
-                <th>Protocol</th>
-                <th>Type</th>
-                <th>Confidence</th>
-                <th>Severity</th>
-                <th>Origin</th>
-              </tr>
+              <tr><th>Time</th><th>Source IP</th><th>Destination IP</th><th>Protocol</th><th>Type</th><th>Confidence</th><th>Severity</th><th>Origin</th></tr>
             </thead>
             <tbody></tbody>
           </table>
@@ -180,7 +173,7 @@
       </div>
     </section>
 
-  </div>
+  </main>
 </div>
 
 <!-- Alert Modal -->
@@ -190,10 +183,7 @@
       <span>⚠ SECURITY ALERT</span>
       <button id="modal-close" aria-label="Close">×</button>
     </div>
-    <p class="modal-sub">
-      Suspicious activity detected
-      <span class="badge-simulated">Simulated</span>
-    </p>
+    <p class="modal-sub">Suspicious activity detected <span class="badge-simulated">Simulated</span></p>
     <dl class="modal-fields">
       <div><dt>Source</dt><dd id="m-source">—</dd></div>
       <div><dt>Destination</dt><dd id="m-dest">—</dd></div>
