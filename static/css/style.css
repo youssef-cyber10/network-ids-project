@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'DSEG7Classic';
+  src: url(data:font/truetype;charset=utf-8;base64,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) format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 :root {
   --bg: #050709;
   --panel: rgba(10, 20, 22, 0.72);
@@ -21,10 +28,9 @@ html, body {
   font-family: Consolas, monospace;
   overflow-x: hidden;
 }
-.mono { font-family: Consolas, monospace; }
+.mono { font-family: 'DSEG7Classic', monospace; font-weight: normal; }
 h1, h2 { margin: 0; font-family: 'Orbitron', sans-serif; font-weight: 700; letter-spacing: 0.03em; }
 
-/* ---------- Background FX ---------- */
 .grid-bg {
   position: fixed; inset: 0; z-index: 0;
   background-image:
@@ -51,7 +57,6 @@ h1, h2 { margin: 0; font-family: 'Orbitron', sans-serif; font-weight: 700; lette
 
 .app { position: relative; z-index: 2; }
 
-/* ---------- Top nav ---------- */
 .topnav {
   display: flex; align-items: center; gap: 24px;
   padding: 14px 32px;
@@ -102,7 +107,6 @@ h1, h2 { margin: 0; font-family: 'Orbitron', sans-serif; font-weight: 700; lette
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--muted); }
 .status-dot.online { background: var(--green); box-shadow: 0 0 8px var(--green); }
 
-/* ---------- Buttons ---------- */
 .btn-neon {
   font-family: Consolas, monospace; font-size: 12px; font-weight: 700;
   text-transform: uppercase; letter-spacing: 0.05em;
@@ -117,7 +121,6 @@ h1, h2 { margin: 0; font-family: 'Orbitron', sans-serif; font-weight: 700; lette
 .btn-neon.small { padding: 6px 12px; font-size: 10px; }
 .btn-neon.ghost { background: transparent; box-shadow: none; }
 
-/* ---------- Main ---------- */
 main { padding: 28px 32px 60px; max-width: 1300px; margin: 0 auto; }
 .page-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 24px; flex-wrap: wrap; gap: 10px; }
 .page-head h1 {
@@ -129,7 +132,6 @@ main { padding: 28px 32px 60px; max-width: 1300px; margin: 0 auto; }
 .view { display: none; }
 .view.active { display: block; }
 
-/* ---------- Cards ---------- */
 .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 14px; margin-bottom: 24px; }
 .stat-card {
   background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
@@ -142,9 +144,8 @@ main { padding: 28px 32px 60px; max-width: 1300px; margin: 0 auto; }
   background: linear-gradient(90deg, var(--cyan), transparent);
 }
 .stat-label { font-size: 10px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
-.stat-value { font-size: 24px; font-weight: 700; color: var(--cyan); text-shadow: 0 0 10px rgba(0,255,240,0.35); }
+.stat-value { font-family: 'DSEG7Classic', monospace; font-size: 26px; font-weight: normal; color: var(--cyan); text-shadow: 0 0 10px rgba(0,255,240,0.35); }
 
-/* ---------- Panels ---------- */
 .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 .panel {
   background: var(--panel); border: 1px solid var(--border); border-radius: 4px;
@@ -154,13 +155,12 @@ main { padding: 28px 32px 60px; max-width: 1300px; margin: 0 auto; }
 .panel-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 10px; }
 .notice { font-size: 11px; color: var(--muted); margin: 0 0 16px; }
 
-/* ---------- Live monitor ---------- */
 .controls { display: flex; align-items: center; gap: 10px; }
 .controls label { color: var(--muted); font-size: 11px; text-transform: uppercase; }
 .controls input[type="range"] { accent-color: var(--cyan); }
 .monitor-counters { display: flex; gap: 32px; margin: 16px 0 10px; }
 .monitor-counters > div { display: flex; flex-direction: column; gap: 2px; }
-.monitor-counters .mono { font-size: 20px; font-weight: 700; color: var(--cyan); }
+.monitor-counters .mono { font-size: 20px; font-weight: normal; color: var(--cyan); }
 .monitor-counters label { color: var(--muted); font-size: 10px; text-transform: uppercase; }
 
 .progress-track { height: 3px; background: rgba(255,255,255,0.06); border-radius: 2px; overflow: hidden; margin-bottom: 16px; }
@@ -178,14 +178,12 @@ main { padding: 28px 32px 60px; max-width: 1300px; margin: 0 auto; }
 .log-line.attack { border-left-color: var(--danger); }
 .log-line.normal { border-left-color: var(--cyan); }
 
-/* ---------- CSV ---------- */
 .upload-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
 .upload-row input[type="file"] { color: var(--muted); font-size: 12px; }
 .error-msg { color: var(--danger); font-size: 12px; margin-bottom: 10px; }
 .csv-summary { display: flex; gap: 24px; margin-bottom: 14px; font-size: 12px; color: var(--muted); }
 .csv-summary strong { color: var(--cyan); }
 
-/* ---------- Tables ---------- */
 .table-wrap { overflow-x: auto; }
 .data-table { width: 100%; border-collapse: collapse; font-size: 12px; }
 .data-table th {
@@ -201,13 +199,11 @@ main { padding: 28px 32px 60px; max-width: 1300px; margin: 0 auto; }
   padding: 3px 9px; border-radius: 3px; border: 1px solid rgba(0,255,240,0.35);
 }
 
-/* ---------- Model info ---------- */
 .model-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
 .model-info > div { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.06); }
 .model-info dt { font-size: 10px; color: var(--muted); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.06em; }
 .model-info dd { margin: 0; font-size: 16px; color: var(--cyan); }
 
-/* ---------- Modal ---------- */
 .modal-backdrop {
   display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.75);
   align-items: center; justify-content: center; z-index: 50; backdrop-filter: blur(4px);
